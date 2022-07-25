@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  bitcoin-core:
+    image: ruimarinho/bitcoin-core:latest
+    command:
+      -printtoconsole
+      -regtest=1
+      -rest
+      -txindex=1
+      -listen=1
+      -server=1
+      -port=18444
+      -rpcallowip=0.0.0.0/0
+      -rpcbind=0.0.0.0
+      -rpcport=18443
+      -rpcuser=user
+      -rpcpassword=randompass
+      -zmqpubrawblock=tcp://0.0.0.0:28332
+      -zmqpubrawtx=tcp://0.0.0.0:28332
+      -server
+    entrypoint: ["bash", "-c", "bitcoind"]
+    ports:
+      - 18443:18443
+      - 18444:18444
+      - 28332:28332
+    volumes:
+      - ./bitcoin-data:/data
+      - ./bitcoin-conf/bitcoin.conf:/root/.bitcoin/bitcoin.conf
+    networks:
+      - bitcoin-network
+networks:
+  bitcoin-network:
+
+volumes:
+  bitcoin-data:
